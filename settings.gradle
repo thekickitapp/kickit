@@ -4,3 +4,4 @@ pluginManagement {
 	}
 }
 rootProject.name = 'kickit'
+enableFeaturePreview('IMPROVED_POM_SUPPORT')
