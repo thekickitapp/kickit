@@ -3,23 +3,31 @@ package com.kickit.config;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.kickit.domain.EventDetailsRepository;
+import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
+@PropertySource("classpath:aws.properties")
 @Configuration
+@EnableDynamoDBRepositories(basePackageClasses = EventDetailsRepository.class)
 public class DynamoDBConfig {
 
     @Value("${AWS_ACCESS_KEY}")
     private String amazonDynamoDBAccessKey;
+
     @Value("${AWS_SECRET_ACCESS_KEY}")
     private String amazonDynamoDBSecretKey;
 
@@ -27,7 +35,6 @@ public class DynamoDBConfig {
     public AWSCredentials amazonAWSCredentials() {
         return new BasicAWSCredentials(amazonDynamoDBAccessKey, amazonDynamoDBSecretKey);
     }
-
     @Bean
     public DynamoDBMapperConfig dynamoDBMapperConfig() {
         return DynamoDBMapperConfig.DEFAULT;
@@ -42,10 +49,8 @@ public class DynamoDBConfig {
     public AmazonDynamoDB amazonDynamoDB() {
         ClientConfiguration clientConfiguration = new ClientConfiguration();
         clientConfiguration.setProtocol(Protocol.HTTP);
-        final AmazonDynamoDBClient client = new AmazonDynamoDBClient(amazonAWSCredentials(), clientConfiguration);
-        client.setRegion(Region.getRegion(Regions.US_WEST_2));
-
-        return client;
+        AmazonDynamoDB dynamoDB = AmazonDynamoDBClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(amazonAWSCredentials())).withClientConfiguration(clientConfiguration).build();
+        return dynamoDB;
     }
 
     @Bean

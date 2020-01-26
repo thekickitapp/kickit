@@ -2,7 +2,9 @@ package com.kickit.service;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.kickit.domain.EventDetails;
 import com.kickit.domain.User;
+import com.kickit.domain.EventDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +37,9 @@ public class DDBService {
         if (user != null) {
             mapper.delete(user);
         }
+    }
+
+    public List<EventDetails> findAllEvents() {
+        return null;
     }
 }

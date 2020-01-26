@@ -24,7 +24,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation platform('software.amazon.awssdk:bom:2.5.29')
 	implementation 'software.amazon.awssdk:dynamodb'
-	implementation 'com.github.derjust:spring-data-dynamodb:4.2.0'
+	implementation 'com.github.derjust:spring-data-dynamodb:5.0.4'
+	implementation 'software.amazon.kinesis:amazon-kinesis-client:2.2.0'
+	implementation 'software.amazon.awssdk:kinesis:2.5.14'
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile group: 'junit', name: 'junit', version: '4.11'
